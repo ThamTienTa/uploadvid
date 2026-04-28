@@ -13,6 +13,8 @@
 <div id="videos"></div>
 
 <script>
+const BASE_URL = "https://uploadvid.onrender.com";
+
 async function uploadVideo() {
   const input = document.getElementById("videoInput");
   const file = input.files[0];
@@ -20,7 +22,7 @@ async function uploadVideo() {
   const formData = new FormData();
   formData.append("video", file);
 
-  await fetch("http://localhost:3000/upload", {
+  await fetch(`${BASE_URL}/upload`, {
     method: "POST",
     body: formData
   });
@@ -29,7 +31,7 @@ async function uploadVideo() {
 }
 
 async function loadVideos() {
-  const res = await fetch("http://localhost:3000/videos-list");
+  const res = await fetch(`${BASE_URL}/videos-list`);
   const videos = await res.json();
 
   const container = document.getElementById("videos");
@@ -37,58 +39,7 @@ async function loadVideos() {
 
   videos.forEach(video => {
     const vid = document.createElement("video");
-    vid.src = "http://localhost:3000" + video;
-    vid.controls = true;
-    vid.width = 300;
-
-    container.appendChild(vid);
-  });
-}
-
-loadVideos();
-</script>
-
-</body>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Video Share</title>
-</head>
-<body>
-
-<h2>Upload Video</h2>
-<input type="file" id="videoInput">
-<button onclick="uploadVideo()">Upload</button>
-
-<h2>Videos</h2>
-<div id="videos"></div>
-
-<script>
-async function uploadVideo() {
-  const input = document.getElementById("videoInput");
-  const file = input.files[0];
-
-  const formData = new FormData();
-  formData.append("video", file);
-
-  await fetch("https://uploadvid.onrender.com/upload", {
-    method: "POST",
-    body: formData
-  });
-
-  loadVideos();
-}
-
-async function loadVideos() {
-  const res = await fetch("https://uploadvid.onrender.com/videos-list");
-  const videos = await res.json();
-
-  const container = document.getElementById("videos");
-  container.innerHTML = "";
-
-  videos.forEach(video => {
-    const vid = document.createElement("video");
-    vid.src = "https://uploadvid.onrender.com" + video;
+    vid.src = BASE_URL + video;
     vid.controls = true;
     vid.width = 300;
 
