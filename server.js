@@ -6,24 +6,38 @@ const path = require("path");
 
 const app = express();
 
+// PORT for Render
 const PORT = process.env.PORT || 3000;
 
-// Safer CORS (allows GitHub Pages + testing)
+// Allow frontend (you can restrict later if needed)
 app.use(cors());
 
-// JSON support (safe default)
+// JSON support
 app.use(express.json());
 
-// Ensure videos folder exists
+// -------------------- ROOT ROUTE --------------------
+app.get("/", (req, res) => {
+  res.json({
+    message: "Video API is running",
+    endpoints: {
+      upload: "/upload",
+      list: "/videos-list"
+    }
+  });
+});
+
+// -------------------- VIDEO FOLDER --------------------
 const videoDir = path.join(__dirname, "videos");
+
+// create folder if not exists
 if (!fs.existsSync(videoDir)) {
   fs.mkdirSync(videoDir);
 }
 
-// Serve videos
+// serve videos statically
 app.use("/videos", express.static(videoDir));
 
-// Multer config
+// -------------------- MULTER SETUP --------------------
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, videoDir);
@@ -36,7 +50,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Upload route
+// -------------------- UPLOAD ROUTE --------------------
 app.post("/upload", upload.single("video"), (req, res) => {
   try {
     if (!req.file) {
@@ -53,7 +67,7 @@ app.post("/upload", upload.single("video"), (req, res) => {
   }
 });
 
-// Get video list
+// -------------------- LIST VIDEOS --------------------
 app.get("/videos-list", (req, res) => {
   try {
     const files = fs.readdirSync(videoDir);
@@ -64,7 +78,7 @@ app.get("/videos-list", (req, res) => {
   }
 });
 
-// Start server (Render-safe)
+// -------------------- START SERVER --------------------
 app.listen(PORT, () => {
   console.log("Server running on port " + PORT);
 });
