@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,4 +50,57 @@ loadVideos();
 </script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Share</title>
+</head>
+<body>
+
+<h2>Upload Video</h2>
+<input type="file" id="videoInput">
+<button onclick="uploadVideo()">Upload</button>
+
+<h2>Videos</h2>
+<div id="videos"></div>
+
+<script>
+async function uploadVideo() {
+  const input = document.getElementById("videoInput");
+  const file = input.files[0];
+
+  const formData = new FormData();
+  formData.append("video", file);
+
+  await fetch("http://localhost:3000/upload", {
+    method: "POST",
+    body: formData
+  });
+
+  loadVideos();
+}
+
+async function loadVideos() {
+  const res = await fetch("http://localhost:3000/videos-list");
+  const videos = await res.json();
+
+  const container = document.getElementById("videos");
+  container.innerHTML = "";
+
+  videos.forEach(video => {
+    const vid = document.createElement("video");
+    vid.src = "http://localhost:3000" + video;
+    vid.controls = true;
+    vid.width = 300;
+
+    container.appendChild(vid);
+  });
+}
+
+loadVideos();
+</script>
+
+</body>
+>>>>>>> 5c451a3e0c06b82d8ce213a21e9824b8995e45f8
 </html>
