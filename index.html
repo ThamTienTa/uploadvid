@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,7 +49,6 @@ loadVideos();
 </script>
 
 </body>
-=======
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,7 +71,7 @@ async function uploadVideo() {
   const formData = new FormData();
   formData.append("video", file);
 
-  await fetch("http://localhost:3000/upload", {
+  await fetch("https://uploadvid.onrender.com/upload", {
     method: "POST",
     body: formData
   });
@@ -82,7 +80,7 @@ async function uploadVideo() {
 }
 
 async function loadVideos() {
-  const res = await fetch("http://localhost:3000/videos-list");
+  const res = await fetch("https://uploadvid.onrender.com/videos-list");
   const videos = await res.json();
 
   const container = document.getElementById("videos");
@@ -90,7 +88,7 @@ async function loadVideos() {
 
   videos.forEach(video => {
     const vid = document.createElement("video");
-    vid.src = "http://localhost:3000" + video;
+    vid.src = "https://uploadvid.onrender.com" + video;
     vid.controls = true;
     vid.width = 300;
 
@@ -102,5 +100,4 @@ loadVideos();
 </script>
 
 </body>
->>>>>>> 5c451a3e0c06b82d8ce213a21e9824b8995e45f8
 </html>
